@@ -1,0 +1,844 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Profitkit — true profit per product for Shopify</title>
+<meta name="description" content="Shopify ranks your products by revenue. Profitkit ranks them by what's left after cost of goods, payment fees, shipping and refunds." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,400;9..144,600;9..144,700&family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper:      #F5F7F2;
+    --greenbar:   #E3EBDB;
+    --ink:        #10160F;
+    --ink-soft:   #4A5348;
+    --red:        #B3261E;
+    --blue:       #2F4858;
+    --rule:       #C6CFC0;
+
+    --display: "Fraunces", Georgia, serif;
+    --body:    "Archivo", system-ui, -apple-system, sans-serif;
+    --mono:    "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+
+    --measure: 62rem;
+    --gutter: clamp(1.25rem, 5vw, 4rem);
+    /* Wide enough that the crossing is the point, not a detail. */
+    --link-col: clamp(5rem, 14vw, 11rem);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem);
+    line-height: 1.55;
+    font-feature-settings: "kern" 1;
+  }
+
+  /* Fraunces wonk: the antique-commercial tilt, used only at display sizes. */
+  .display {
+    font-family: var(--display);
+    font-variation-settings: "SOFT" 20, "WONK" 1;
+    font-weight: 600;
+    line-height: 1.02;
+    letter-spacing: -0.018em;
+    text-wrap: balance;
+  }
+
+  .num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+  a { color: var(--blue); }
+
+  :focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 3px;
+  }
+
+  .wrap {
+    max-width: var(--measure);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  /* ---------- masthead ---------- */
+
+  .masthead {
+    border-bottom: 1px solid var(--ink);
+    position: sticky;
+    top: 0;
+    background: var(--paper);
+    z-index: 20;
+  }
+  .masthead-inner {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 0.85rem;
+  }
+  .wordmark {
+    font-family: var(--display);
+    font-variation-settings: "SOFT" 20, "WONK" 1;
+    font-weight: 700;
+    font-size: 1.32rem;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  /* No decorative accent here on purpose: red means loss everywhere on this page,
+     and spending it on a logo dot would weaken that. */
+
+  .btn {
+    display: inline-block;
+    font-family: var(--body);
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.005em;
+    padding: 0.62em 1.15em;
+    background: var(--ink);
+    color: var(--paper);
+    border: 1px solid var(--ink);
+    text-decoration: none;
+    transition: background 140ms ease, color 140ms ease;
+  }
+  .btn:hover { background: var(--red); border-color: var(--red); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink);
+  }
+  .btn-ghost:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  /* ---------- hero ---------- */
+
+  .hero { padding-block: clamp(3rem, 8vw, 5.5rem) clamp(2rem, 5vw, 3rem); }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 1.15rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2.5rem, 1.3rem + 5.2vw, 5.1rem);
+    margin: 0 0 1.4rem;
+    max-width: 17ch;
+  }
+  .hero-title .fell { color: var(--red); }
+
+  .hero-sub {
+    max-width: 46ch;
+    font-size: clamp(1.05rem, 1rem + 0.35vw, 1.25rem);
+    color: var(--ink-soft);
+    margin: 0 0 2rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    align-items: center;
+    margin-top: clamp(1.6rem, 3vw, 2.2rem);
+  }
+  .hero-note {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- the signature: re-rank slope chart ---------- */
+
+  .rerank {
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding-block: 1.6rem 1.9rem;
+  }
+
+  .rerank-heads {
+    display: grid;
+    grid-template-columns: 1fr var(--link-col) 1fr;
+    gap: 0;
+    margin-bottom: 0.7rem;
+  }
+  .rerank-head {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .rerank-head.right { grid-column: 3; text-align: right; }
+
+  .rerank-body {
+    display: grid;
+    grid-template-columns: 1fr var(--link-col) 1fr;
+    position: relative;
+  }
+
+  .col { display: flex; flex-direction: column; }
+
+  .row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    padding: 0.5rem 0.7rem;
+    background: transparent;
+    transition: background 120ms ease;
+    cursor: default;
+  }
+  /* Greenbar: the alternating band is the paper, not a value judgement. */
+  .row:nth-child(odd) { background: var(--greenbar); }
+  .row.is-active { background: var(--ink); color: var(--paper); }
+  .row.is-active .row-figure { color: var(--paper); }
+  .row.is-active .row-rank { color: var(--paper); opacity: 0.6; }
+
+  .row-rank {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    width: 1.3em;
+    flex: none;
+  }
+  .row-name {
+    font-size: 0.97rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .row-figure {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.9rem;
+    margin-left: auto;
+    flex: none;
+  }
+  .row-drop {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--red);
+    white-space: nowrap;
+    flex: none;
+  }
+  .row-figure.loss { color: var(--red); font-weight: 500; }
+  .row.is-active .row-figure.loss { color: #FF9B90; }
+
+  .links { grid-column: 2; position: relative; }
+  .links svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .link-path {
+    fill: none;
+    stroke: var(--ink-soft);
+    stroke-width: 1.4;
+    opacity: 0.5;
+    transition: opacity 140ms ease, stroke-width 140ms ease;
+  }
+  /* The product that falls is the argument; its line carries the weight. */
+  .link-path.is-loss { stroke: var(--red); stroke-width: 2.4; opacity: 0.95; }
+  .link-path.is-active { opacity: 1; stroke-width: 3; }
+
+  .rerank-caption {
+    margin: 1.4rem 0 0;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    max-width: 54ch;
+  }
+  .rerank-caption strong { color: var(--ink); font-weight: 600; }
+
+  /* stacked fallback for narrow screens */
+  .rerank-stack { display: none; }
+
+  /* ---------- generic section ---------- */
+
+  .band { padding-block: clamp(3rem, 7vw, 5rem); }
+  .band + .band { border-top: 1px solid var(--rule); }
+
+  .section-title {
+    font-size: clamp(1.75rem, 1.2rem + 2.1vw, 2.9rem);
+    margin: 0 0 0.9rem;
+    max-width: 20ch;
+  }
+  .section-lede {
+    max-width: 52ch;
+    color: var(--ink-soft);
+    margin: 0 0 2.2rem;
+  }
+
+  /* ---------- ledger subtraction ---------- */
+
+  .ledger-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 20rem);
+    gap: clamp(1.5rem, 5vw, 3.5rem);
+    align-items: start;
+  }
+
+  .ledger {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    font-size: clamp(0.85rem, 0.8rem + 0.25vw, 0.98rem);
+    border: 1px solid var(--ink);
+    padding: 1.15rem 1.25rem 1.3rem;
+    background: var(--paper);
+  }
+  .ledger-line {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-block: 0.34rem;
+  }
+  .ledger-line .op { color: var(--ink-soft); margin-right: 0.5em; }
+  .ledger-line .label { color: var(--ink-soft); }
+  .ledger-rule { border: 0; border-top: 1px solid var(--ink); margin: 0.55rem 0 0.2rem; }
+  .ledger-total { font-weight: 600; }
+  .ledger-total .val { color: var(--red); }
+  .ledger-cap {
+    font-family: var(--body);
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    margin-top: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .subtracted { list-style: none; margin: 0; padding: 0; }
+  .subtracted li {
+    padding-block: 0.85rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .subtracted li:first-child { border-top: 1px solid var(--rule); }
+  .subtracted dfn {
+    display: block;
+    font-style: normal;
+    font-weight: 600;
+    margin-bottom: 0.15rem;
+  }
+  .subtracted p { margin: 0; color: var(--ink-soft); font-size: 0.94rem; }
+
+  /* ---------- ladder (a real sequence, so it is numbered) ---------- */
+
+  .ladder { display: grid; gap: 0; }
+  .rung {
+    display: grid;
+    grid-template-columns: 3.2rem minmax(0, 1fr);
+    gap: 0 1.2rem;
+    padding-block: 1.35rem;
+    border-top: 1px solid var(--rule);
+    align-items: start;
+  }
+  .rung:last-child { border-bottom: 1px solid var(--rule); }
+  .rung-n {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    color: var(--red);
+    padding-top: 0.3rem;
+  }
+  .rung h3 {
+    font-family: var(--body);
+    font-size: 1.12rem;
+    font-weight: 600;
+    margin: 0 0 0.3rem;
+  }
+  .rung p { margin: 0; color: var(--ink-soft); max-width: 56ch; }
+  .rung .time {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    display: block;
+    margin-top: 0.4rem;
+  }
+
+  /* ---------- limits ---------- */
+
+  .limits { display: grid; gap: 0; }
+  .limit {
+    display: grid;
+    grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+    gap: 0.3rem 1.5rem;
+    padding-block: 1.15rem;
+    border-top: 1px solid var(--rule);
+  }
+  .limit:last-child { border-bottom: 1px solid var(--rule); }
+  .limit dt { font-weight: 600; }
+  .limit dd { margin: 0; color: var(--ink-soft); }
+
+  /* ---------- pricing ---------- */
+
+  .plans {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1.25rem;
+  }
+  .plan {
+    border: 1px solid var(--ink);
+    padding: 1.5rem 1.4rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .plan-name {
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 0.7rem;
+  }
+  .plan-price {
+    font-family: var(--display);
+    font-variation-settings: "SOFT" 20, "WONK" 1;
+    font-weight: 600;
+    font-size: 2.7rem;
+    line-height: 1;
+    margin: 0 0 0.15rem;
+    letter-spacing: -0.02em;
+  }
+  .plan-price .per {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    color: var(--ink-soft);
+  }
+  .plan-what { margin: 0.9rem 0 1.3rem; color: var(--ink-soft); font-size: 0.95rem; }
+  .plan ul { list-style: none; margin: 0 0 1.4rem; padding: 0; font-size: 0.94rem; }
+  .plan li { padding-block: 0.32rem; }
+  .plan li::before { content: "—"; color: var(--red); margin-right: 0.55em; }
+  .plan .btn { margin-top: auto; text-align: center; }
+  .plan-note {
+    font-family: var(--mono);
+    font-size: 0.76rem;
+    color: var(--ink-soft);
+    margin: 1.4rem 0 0;
+  }
+
+  /* ---------- footer ---------- */
+
+  .foot {
+    border-top: 1px solid var(--ink);
+    padding-block: 2rem 2.6rem;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+  .foot-inner { display: flex; flex-wrap: wrap; gap: 0.8rem 2rem; justify-content: space-between; }
+  .foot a { color: var(--blue); }
+
+  /* ---------- entrance: one orchestrated moment, then stillness ---------- */
+
+  .rise { opacity: 0; transform: translateY(0.7rem); }
+  .is-ready .rise {
+    opacity: 1;
+    transform: none;
+    transition: opacity 620ms cubic-bezier(.2,.7,.3,1), transform 620ms cubic-bezier(.2,.7,.3,1);
+  }
+  .is-ready .rise-1 { transition-delay: 60ms; }
+  .is-ready .rise-2 { transition-delay: 160ms; }
+  .is-ready .rise-3 { transition-delay: 260ms; }
+  .is-ready .rise-4 { transition-delay: 380ms; }
+
+  .link-path {
+    stroke-dasharray: var(--len, 200);
+    stroke-dashoffset: var(--len, 200);
+  }
+  .is-drawn .link-path {
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 900ms cubic-bezier(.3,.7,.3,1) 480ms,
+                opacity 140ms ease, stroke-width 140ms ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rise, .is-ready .rise { opacity: 1; transform: none; transition: none; }
+    .link-path, .is-drawn .link-path {
+      stroke-dasharray: none;
+      stroke-dashoffset: 0;
+      transition: opacity 140ms ease, stroke-width 140ms ease;
+    }
+  }
+
+  /* ---------- responsive ---------- */
+
+  @media (max-width: 46rem) {
+    .rerank-heads, .rerank-body { display: none; }
+    .rerank-stack { display: block; }
+    .stack-head {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin: 0 0 0.5rem;
+    }
+    .stack-head + .col { margin-bottom: 1.6rem; }
+    /* The drop marker must never eat the product name — it wraps to its own line. */
+    .rerank-stack .row { flex-wrap: wrap; }
+    .rerank-stack .row-figure { order: 2; }
+    .rerank-stack .row-drop {
+      order: 3;
+      flex-basis: 100%;
+      padding-left: 1.9rem;
+      margin-top: 0.1rem;
+    }
+    .ledger-layout { grid-template-columns: minmax(0, 1fr); }
+    .limit { grid-template-columns: minmax(0, 1fr); }
+    .rung { grid-template-columns: 2.4rem minmax(0, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap masthead-inner">
+    <a class="wordmark" href="#top">Profitkit</a>
+    <a class="btn" href="#install">Install on Shopify</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO — the thesis, drawn -->
+  <section class="hero wrap">
+    <p class="eyebrow rise rise-1">Contribution margin for Shopify</p>
+    <h1 class="display hero-title rise rise-2">
+      Your best seller might be your <span class="fell">worst product</span>.
+    </h1>
+    <p class="hero-sub rise rise-3">
+      Shopify ranks products by revenue. Profitkit ranks them by what's left after
+      cost of goods, payment fees, shipping and refunds. The order changes.
+    </p>
+    <!-- SIGNATURE: the same six products, ranked two ways -->
+    <figure class="rerank rise rise-4" id="rerank">
+      <div class="rerank-heads" aria-hidden="true">
+        <span class="rerank-head">Ranked by revenue</span>
+        <span class="rerank-head right">Ranked by profit</span>
+      </div>
+
+      <div class="rerank-body">
+        <div class="col col-left" id="colRevenue"></div>
+        <div class="links" id="links" aria-hidden="true"><svg id="linkSvg" preserveAspectRatio="none"></svg></div>
+        <div class="col col-right" id="colMargin"></div>
+      </div>
+
+      <!-- narrow screens get the same fact without the crossing lines -->
+      <div class="rerank-stack">
+        <p class="stack-head">Ranked by revenue</p>
+        <div class="col" id="stackRevenue"></div>
+        <p class="stack-head">Ranked by profit</p>
+        <div class="col" id="stackMargin"></div>
+      </div>
+
+      <figcaption class="rerank-caption">
+        <strong>Wool Blanket sells the most and earns the least.</strong>
+        It ships heavy, it gets discounted, and a fifth of it comes back.
+        Revenue never showed you that.
+      </figcaption>
+    </figure>
+
+    <!-- The ask comes after the argument, not before it. -->
+    <div class="hero-actions rise rise-4">
+      <a class="btn" href="#install">Install on Shopify</a>
+      <span class="hero-note">Free tier, no card</span>
+    </div>
+  </section>
+
+  <!-- WHAT SHOPIFY LEAVES OUT -->
+  <section class="band wrap">
+    <h2 class="display section-title">Four costs Shopify never subtracts.</h2>
+    <p class="section-lede">
+      Your dashboard stops at revenue. The rest lives in a supplier invoice, a payout
+      summary, a shipping label and a refund you'd rather forget.
+    </p>
+
+    <div class="ledger-layout">
+      <ul class="subtracted">
+        <li>
+          <dfn>Cost of goods</dfn>
+          <p>Shopify has a cost field. Almost nobody fills it in, so Profitkit works without it.</p>
+        </li>
+        <li>
+          <dfn>Payment fees</dfn>
+          <p>Reported for Shopify Payments. Every other gateway reports nothing, so those are modelled from your rates.</p>
+        </li>
+        <li>
+          <dfn>Shipping variance</dfn>
+          <p>What you charged minus what it cost. Free shipping is a discount with a different name.</p>
+        </li>
+        <li>
+          <dfn>Refunds</dfn>
+          <p>Reversed against the exact line that came back, not spread evenly across the order.</p>
+        </li>
+      </ul>
+
+      <div class="ledger" role="table" aria-label="Contribution margin for Wool Blanket over 90 days">
+        <div class="ledger-line"><span class="label">Revenue</span><span>3,196.47</span></div>
+        <div class="ledger-line"><span class="label"><span class="op">−</span>Cost of goods</span><span>2,447.66</span></div>
+        <div class="ledger-line"><span class="label"><span class="op">−</span>Payment fees</span><span>80.90</span></div>
+        <div class="ledger-line"><span class="label"><span class="op">−</span>Shipping variance</span><span>10.67</span></div>
+        <div class="ledger-line"><span class="label"><span class="op">−</span>Refunds</span><span>1,087.11</span></div>
+        <hr class="ledger-rule" />
+        <div class="ledger-line ledger-total"><span>Contribution margin</span><span class="val">−429.87</span></div>
+        <p class="ledger-cap">Wool Blanket, 90 days. Same product that tops the revenue chart.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE LADDER — genuinely a sequence, so it is numbered -->
+  <section class="band wrap">
+    <h2 class="display section-title">You don't need your costs ready.</h2>
+    <p class="section-lede">
+      An app that opens with "enter the cost of your 62 products" is an app you close.
+      Start with one number and sharpen it later, or never.
+    </p>
+
+    <div class="ladder">
+      <div class="rung">
+        <span class="rung-n">01</span>
+        <div>
+          <h3>One number for everything</h3>
+          <p>Roughly what percentage of the price does a product cost you? Answer once and every product gets a margin.</p>
+          <span class="time">Under a minute to a complete report</span>
+        </div>
+      </div>
+      <div class="rung">
+        <span class="rung-n">02</span>
+        <div>
+          <h3>Then split it by vendor</h3>
+          <p>Most stores have three or four cost tiers, not sixty-two. Override a supplier and everything they make follows.</p>
+          <span class="time">A few minutes</span>
+        </div>
+      </div>
+      <div class="rung">
+        <span class="rung-n">03</span>
+        <div>
+          <h3>Then import the real thing</h3>
+          <p>Upload the spreadsheet you already keep. Map your own column names. Bad rows come back in a report you can fix — they don't reject the file.</p>
+          <span class="time">When you're ready</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HONEST LIMITS — the differentiator -->
+  <section class="band wrap">
+    <h2 class="display section-title">What it can't know.</h2>
+    <p class="section-lede">
+      Three things Shopify's API genuinely does not expose. Profitkit models them and
+      labels every modelled figure, so you always know which numbers are firm.
+    </p>
+
+    <dl class="limits">
+      <div class="limit">
+        <dt>Actual shipping cost</dt>
+        <dd>Not in the API at all — not null, absent. It's your figure, or an estimate.</dd>
+      </div>
+      <div class="limit">
+        <dt>Fees outside Shopify Payments</dt>
+        <dd>No gateway but Shopify's reports what it charged. Everything else is modelled from rates you set.</dd>
+      </div>
+      <div class="limit">
+        <dt>Why something was refunded</dt>
+        <dd>Only refunds processed through Shopify's Returns flow carry a reason. Refunds issued from the order page carry none.</dd>
+      </div>
+      <div class="limit">
+        <dt>Orders older than 60 days</dt>
+        <dd>Shopify's standard order permission stops there. History builds forward from the day you install.</dd>
+      </div>
+    </dl>
+  </section>
+
+  <!-- PRICING -->
+  <section class="band wrap" id="install">
+    <h2 class="display section-title">Two plans. The free one is finished.</h2>
+    <p class="section-lede">
+      Most analytics apps advertise a free tier and put the answer behind $147.
+      That's the whole reason this exists.
+    </p>
+
+    <div class="plans">
+      <div class="plan">
+        <p class="plan-name">Free</p>
+        <p class="plan-price">$0</p>
+        <p class="plan-what">Product-level margin for the last 90 days.</p>
+        <ul>
+          <li>Every product, ranked by what it actually earns</li>
+          <li>The loss-makers, each with its cause</li>
+          <li>Discount and refund erosion</li>
+          <li>Cost estimates, vendor overrides, CSV import</li>
+        </ul>
+        <a class="btn btn-ghost" href="#">Install free</a>
+      </div>
+
+      <div class="plan">
+        <p class="plan-name">Pro</p>
+        <p class="plan-price">$29<span class="per"> / month</span></p>
+        <p class="plan-what">Everything in Free, without the window.</p>
+        <ul>
+          <li>Full history, as far back as you've accumulated</li>
+          <li>Accountant-ready CSV export</li>
+        </ul>
+        <a class="btn" href="#">Start Pro</a>
+      </div>
+    </div>
+
+    <p class="plan-note">The free tier is not a trial. It doesn't expire and it doesn't wall the answer.</p>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-inner">
+    <span>Profitkit — contribution margin for Shopify stores</span>
+    <span>
+      <a href="/privacy">Privacy</a> ·
+      <a href="mailto:support@profitkit.app">support@profitkit.app</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // Six products, one store, ninety days. Ordered by revenue; margin re-ranks them.
+  var PRODUCTS = [
+    { name: "Wool Blanket",   revenue: 3196.47, margin: -429.87 },
+    { name: "Alpine Tote",    revenue: 2883.89, margin: 1465.34 },
+    { name: "Cutting Board",  revenue: 2051.62, margin: 1012.17 },
+    { name: "Throw Pillow",   revenue: 1384.48, margin: -169.34 },
+    { name: "Ceramic Mug",    revenue: 1203.72, margin:  213.87 },
+    { name: "Desk Organizer", revenue:  424.42, margin:  216.99 }
+  ];
+
+  var money = function (n) {
+    var s = Math.abs(n).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return (n < 0 ? "−$" : "$") + s;
+  };
+
+  var byRevenue = PRODUCTS.slice().sort(function (a, b) { return b.revenue - a.revenue; });
+  var byMargin  = PRODUCTS.slice().sort(function (a, b) { return b.margin - a.margin; });
+
+  function buildRow(item, rank, field, wasRank) {
+    var row = document.createElement("div");
+    row.className = "row";
+    row.dataset.name = item.name;
+
+    var r = document.createElement("span");
+    r.className = "row-rank";
+    r.textContent = rank;
+
+    var n = document.createElement("span");
+    n.className = "row-name";
+    n.textContent = item.name;
+
+    row.appendChild(r); row.appendChild(n);
+
+    // Narrow screens lose the connecting lines, so the fall has to be stated.
+    // Only drops are marked: a product climbing the ranking isn't the argument.
+    if (wasRank != null && wasRank < rank) {
+      var d = document.createElement("span");
+      d.className = "row-drop";
+      d.textContent = "↓ from " + wasRank;
+      row.appendChild(d);
+    }
+
+    var f = document.createElement("span");
+    f.className = "row-figure" + (item[field] < 0 ? " loss" : "");
+    f.textContent = money(item[field]);
+    row.appendChild(f);
+
+    return row;
+  }
+
+  function fill(el, list, field, previousOrder) {
+    if (!el) return;
+    list.forEach(function (item, i) {
+      var was = previousOrder
+        ? previousOrder.findIndex(function (p) { return p.name === item.name; }) + 1
+        : null;
+      el.appendChild(buildRow(item, i + 1, field, was));
+    });
+  }
+
+  fill(document.getElementById("colRevenue"), byRevenue, "revenue");
+  fill(document.getElementById("colMargin"),  byMargin,  "margin");
+  fill(document.getElementById("stackRevenue"), byRevenue, "revenue");
+  fill(document.getElementById("stackMargin"),  byMargin,  "margin", byRevenue);
+
+  var svg = document.getElementById("linkSvg");
+  var linksBox = document.getElementById("links");
+  var leftCol = document.getElementById("colRevenue");
+  var rightCol = document.getElementById("colMargin");
+
+  function drawLinks() {
+    if (!svg || !linksBox) return;
+    var box = linksBox.getBoundingClientRect();
+    if (box.width < 2) return;
+
+    svg.setAttribute("viewBox", "0 0 " + box.width + " " + box.height);
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+    byRevenue.forEach(function (item) {
+      var l = leftCol.querySelector('[data-name="' + item.name + '"]');
+      var r = rightCol.querySelector('[data-name="' + item.name + '"]');
+      if (!l || !r) return;
+
+      var lb = l.getBoundingClientRect(), rb = r.getBoundingClientRect();
+      var y1 = lb.top - box.top + lb.height / 2;
+      var y2 = rb.top - box.top + rb.height / 2;
+      var w = box.width;
+
+      var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute("d", "M 0 " + y1 + " C " + (w * 0.45) + " " + y1 + ", " + (w * 0.55) + " " + y2 + ", " + w + " " + y2);
+      path.setAttribute("class", "link-path" + (item.margin < 0 ? " is-loss" : ""));
+      path.dataset.name = item.name;
+      svg.appendChild(path);
+
+      var len = path.getTotalLength ? path.getTotalLength() : 240;
+      path.style.setProperty("--len", len);
+    });
+
+    requestAnimationFrame(function () { document.body.classList.add("is-drawn"); });
+  }
+
+  // Hovering a product lights its path across both rankings.
+  function setActive(name, on) {
+    [leftCol, rightCol].forEach(function (col) {
+      var row = col && col.querySelector('[data-name="' + name + '"]');
+      if (row) row.classList.toggle("is-active", on);
+    });
+    var path = svg && svg.querySelector('[data-name="' + name + '"]');
+    if (path) path.classList.toggle("is-active", on);
+  }
+
+  [leftCol, rightCol].forEach(function (col) {
+    if (!col) return;
+    col.addEventListener("mouseover", function (e) {
+      var row = e.target.closest(".row");
+      if (row) setActive(row.dataset.name, true);
+    });
+    col.addEventListener("mouseout", function (e) {
+      var row = e.target.closest(".row");
+      if (row) setActive(row.dataset.name, false);
+    });
+  });
+
+  requestAnimationFrame(function () {
+    document.body.classList.add("is-ready");
+    drawLinks();
+  });
+
+  var t;
+  window.addEventListener("resize", function () {
+    clearTimeout(t);
+    t = setTimeout(drawLinks, 120);
+  });
+  document.fonts && document.fonts.ready.then(drawLinks);
+})();
+</script>
+</body>
+</html>
