@@ -12,11 +12,13 @@
 1. Sticky masthead (wordmark + Install)
 2. Hero — brand → headline → sentence → CTA
 3. Full-bleed band — RerankChart (product demo)
-4. Costs — what revenue hides
-5. Ladder — contribution margin method
-6. Limits — honest scope
-7. Pricing
-8. Footer / install
+4. Dashboard preview — the app inside Shopify admin
+5. Costs — what revenue hides
+6. Ladder — contribution margin method
+7. Operators — who it is for (anonymous portraits, no quotes)
+8. Limits — honest scope
+9. Pricing
+10. Footer / install
 
 ## Hero overrides
 
@@ -35,6 +37,15 @@
 
 - Primary: `Install on Shopify`
 - Meta: `Free tier · no card` (mono)
+
+## Imagery
+
+Local stills only, from `/public/media` — no remote hosts at runtime. One grade
+across the page: light desaturation, no colour pops competing with loss red.
+
+- Portraits are **anonymous operator stills**, square (radius 0), never circular
+- No names, roles-as-people, or quotes attached to a face until real customers exist
+- One full-bleed image moment only (the closing band), with a hard tonal wash
 
 ## Do not add on landing
 

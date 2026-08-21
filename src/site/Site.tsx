@@ -1,18 +1,24 @@
 import { Costs } from "@/site/Costs";
+import { DashPreview } from "@/site/DashPreview";
 import { Foot } from "@/site/Foot";
 import { Hero } from "@/site/Hero";
 import { Install } from "@/site/Install";
 import { Ladder } from "@/site/Ladder";
 import { Limits } from "@/site/Limits";
 import { Mast } from "@/site/Mast";
+import { Operators } from "@/site/Operators";
 import { Plans } from "@/site/Plans";
 import { Rerank } from "@/site/Rerank";
 
 /*
-  Section order is locked by design-system/profitkit/pages/landing.md:
-  masthead → hero → full-bleed product demo → costs → method → limits → pricing →
-  install. The previous composition ran nine loosely-ordered sections including a
-  trust strip, which that file explicitly rules out for this page.
+  Order follows design-system/profitkit/pages/landing.md, which now records ten
+  sections rather than eight. Two were added deliberately and that file was updated
+  to match — a locked list that no longer describes the page is worse than none.
+
+  The spine is unchanged: demo early, limits before pricing, one closing ask.
+  DashPreview is the second and deeper product look, after the re-rank chart has
+  made the argument. Operators sits between method and limits, where a reader who
+  now understands the method wants to know whether it is aimed at them.
 */
 export function Site() {
   return (
@@ -21,8 +27,10 @@ export function Site() {
       <main className="flex-1">
         <Hero />
         <Rerank />
+        <DashPreview />
         <Costs />
         <Ladder />
+        <Operators />
         <Limits />
         <Plans />
         <Install />

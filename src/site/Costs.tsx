@@ -1,3 +1,7 @@
+import Image from "next/image";
+
+import { SCENES } from "@/site/media";
+
 /*
   What revenue hides. A ledger, not a card grid — four hairline rows, each naming
   the cost, what Shopify actually gives you, and what Profitkit does about it.
@@ -12,12 +16,14 @@ const COSTS = [
   },
   {
     name: "Payment fees",
-    shopify: "Reported for Shopify Payments only — and only once a payout settles.",
+    shopify:
+      "Reported for Shopify Payments only — and only once a payout settles.",
     fix: "Set a rate per gateway you actually use. Without one, every non-Shopify-Payments order looks free to process.",
   },
   {
     name: "Shipping",
-    shopify: "What fulfilment costs you is absent from the API. Not empty — absent.",
+    shopify:
+      "What fulfilment costs you is absent from the API. Not empty — absent.",
     fix: "You supply one figure per order. Until you do, shipping counts as nothing rather than as profit.",
   },
   {
@@ -36,28 +42,50 @@ export function Costs() {
             Four costs Shopify never subtracts.
           </h2>
           <p className="mt-4 max-w-[38ch] text-sm leading-relaxed text-ink-soft">
-            Your dashboard stops at revenue. The rest lives in a supplier invoice, a
-            payout summary, a shipping label, and a refund you would rather forget.
+            Your dashboard stops at revenue. The rest lives in a supplier
+            invoice, a payout summary, a shipping label, and a refund you would
+            rather forget.
           </p>
         </div>
 
-        <ul className="m-0 list-none p-0">
-          {COSTS.map((cost, i) => (
-            <li
-              key={cost.name}
-              className="grid grid-cols-1 gap-x-8 gap-y-2 border-t border-rule py-6 last:border-b sm:grid-cols-[1.75rem_11rem_minmax(0,1fr)]"
-            >
-              <span className="num text-xs text-ink-soft">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <h3 className="font-display text-lg font-semibold text-ink">{cost.name}</h3>
-              <div className="max-w-[58ch]">
-                <p className="text-sm leading-relaxed text-ink">{cost.shopify}</p>
-                <p className="mt-2 text-sm leading-relaxed text-ink-soft">{cost.fix}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <div>
+          {/* Wide crop rather than a boxed thumbnail: the goods are the subject of
+              every figure below, and a letterbox reads as a header rule with an
+              image in it rather than as decoration. */}
+          <div className="relative mb-2 aspect-[16/5] w-full overflow-hidden bg-paper-deep">
+            <Image
+              src={SCENES.floor.src}
+              alt={SCENES.floor.alt}
+              fill
+              sizes="(min-width: 1024px) 46rem, 100vw"
+              className="object-cover grayscale contrast-[1.05]"
+            />
+          </div>
+
+          <ul className="m-0 list-none p-0">
+            {COSTS.map((cost, i) => (
+              <li
+                key={cost.name}
+                className="grid grid-cols-1 gap-x-8 gap-y-2 border-t border-rule py-6 last:border-b sm:grid-cols-[1.75rem_11rem_minmax(0,1fr)]"
+              >
+                <span className="num text-xs text-ink-soft">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <h3 className="font-display text-lg font-semibold text-ink">
+                  {cost.name}
+                </h3>
+                <div className="max-w-[58ch]">
+                  <p className="text-sm leading-relaxed text-ink">
+                    {cost.shopify}
+                  </p>
+                  <p className="mt-2 text-sm leading-relaxed text-ink-soft">
+                    {cost.fix}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
   );
