@@ -83,11 +83,9 @@ function Row({
   return (
     <div
       data-p={pid}
-      tabIndex={0}
-      aria-label={`${rank}. ${name}, ${figure}${isLoss ? ", loss" : ""}`}
       style={{ height: ROW }}
       role="listitem"
-      className={`rerank-row flex cursor-pointer items-center gap-3 border-t border-white/10 px-3 ${
+      className={`rerank-row flex items-center gap-3 border-t border-white/10 px-3 ${
         right ? "flex-row-reverse text-right" : ""
       }`}
     >
@@ -111,13 +109,13 @@ function Row({
 
 const pairHover = PRODUCTS.map(
   (_, i) => `
-    .rerank:has([data-p="${i}"]:is(:hover, :focus-visible)) [data-p="${i}"] {
+    .rerank:has([data-p="${i}"]:hover) [data-p="${i}"] {
       opacity: 1;
     }
-    .rerank:has([data-p="${i}"]:is(:hover, :focus-visible)) .rerank-row[data-p="${i}"] {
+    .rerank:has([data-p="${i}"]:hover) .rerank-row[data-p="${i}"] {
       background: rgba(255, 255, 255, 0.07);
     }
-    .rerank:has([data-p="${i}"]:is(:hover, :focus-visible)) .rerank-link[data-p="${i}"] [data-draw] {
+    .rerank:has([data-p="${i}"]:hover) .rerank-link[data-p="${i}"] [data-draw] {
       stroke-width: 2.5px;
     }
   `,
@@ -195,8 +193,6 @@ export function Rerank() {
                         vectorEffect="non-scaling-stroke"
                         pathLength={1}
                         style={{
-                          strokeDasharray: 1,
-                          strokeDashoffset: 0,
                           animation: `draw 900ms cubic-bezier(0.2, 0.7, 0.3, 1) ${480 + from * 70}ms both`,
                         }}
                       />
@@ -237,8 +233,18 @@ export function Rerank() {
       {/* Scoped keyframes: the second and last motion on this page. */}
       <style>{`
         @keyframes draw {
-          from { stroke-dashoffset: 1; }
-          to { stroke-dashoffset: 0; }
+          0% {
+            stroke-dasharray: 1;
+            stroke-dashoffset: 1;
+          }
+          99% {
+            stroke-dasharray: 1;
+            stroke-dashoffset: 0;
+          }
+          100% {
+            stroke-dasharray: none;
+            stroke-dashoffset: 0;
+          }
         }
         .rerank-row,
         .rerank-link {
@@ -247,8 +253,8 @@ export function Rerank() {
         .rerank-link [data-draw] {
           transition: stroke-width 180ms ease;
         }
-        .rerank:has([data-p]:is(:hover, :focus-visible)) .rerank-row,
-        .rerank:has([data-p]:is(:hover, :focus-visible)) .rerank-link {
+        .rerank:has([data-p]:hover) .rerank-row,
+        .rerank:has([data-p]:hover) .rerank-link {
           opacity: 0.22;
         }
         ${pairHover}
