@@ -10,6 +10,7 @@ const COLUMNS = [
   {
     heading: "Product",
     links: [
+      { label: "How to use it", href: "/guide" },
       { label: "Method", href: "/#method" },
       { label: "Limits", href: "/#limits" },
       { label: "Pricing", href: "/#pricing" },
@@ -24,7 +25,9 @@ const COLUMNS = [
   },
   {
     heading: "Contact",
-    links: [{ label: "support@profitkit.app", href: "mailto:support@profitkit.app" }],
+    links: [
+      { label: "support@profitkit.app", href: "mailto:support@profitkit.app" },
+    ],
   },
 ];
 
@@ -33,9 +36,14 @@ export function Foot() {
     <footer className="border-t border-rule bg-surface/70 py-12">
       <div className="wrap grid grid-cols-2 gap-8 md:grid-cols-[minmax(0,1.4fr)_repeat(3,minmax(0,1fr))]">
         <div className="col-span-2 md:col-span-1">
-          <Link href="/" className="inline-flex items-center gap-2.5 no-underline">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2.5 no-underline"
+          >
             <Mark className="size-7" />
-            <span className="font-display text-base font-semibold text-ink">Profitkit</span>
+            <span className="font-display text-base font-semibold text-ink">
+              Profitkit
+            </span>
           </Link>
           <p className="mt-3 max-w-[26ch] text-sm leading-relaxed text-ink-soft">
             Contribution margin per product, for Shopify stores on thin margins.

@@ -84,24 +84,27 @@ function Row({
     <div
       data-p={pid}
       tabIndex={0}
+      aria-label={`${rank}. ${name}, ${figure}${isLoss ? ", loss" : ""}`}
       style={{ height: ROW }}
+      role="listitem"
       className={`rerank-row flex cursor-pointer items-center gap-3 border-t border-white/10 px-3 ${
         right ? "flex-row-reverse text-right" : ""
       }`}
     >
       <span className="num w-5 shrink-0 text-xs text-white/35">{rank}</span>
       <span className="min-w-0 flex-1 truncate text-sm text-ink-inverse">{name}</span>
-      <span
-        className={`num shrink-0 text-sm ${isLoss ? "text-loss-soft" : "text-ink-inverse/85"}`}
-      >
-        {figure}
-      </span>
-      {/* Colour is never the only loss signal. */}
+      {/* Loss before figure in the DOM so flex-row-reverse parks the money on the
+          gutter, same as the revenue column. Colour is never the only loss signal. */}
       {isLoss && (
         <span className="num shrink-0 text-[0.625rem] uppercase tracking-[0.12em] text-loss-soft">
           loss
         </span>
       )}
+      <span
+        className={`num shrink-0 text-sm ${isLoss ? "text-loss-soft" : "text-ink-inverse/85"}`}
+      >
+        {figure}
+      </span>
     </div>
   );
 }
@@ -144,7 +147,7 @@ export function Rerank() {
           {/* self-start on every cell: without it the grid stretches each column
               to the row box and the bottom rule floats away from the last row. */}
           <div className="mt-3 grid grid-cols-1 items-start md:grid-cols-[1fr_12rem_1fr]">
-            <div className="border-b border-white/10">
+            <div role="list" aria-label="Ranked by revenue" className="border-b border-white/10">
               {byRevenue.map((p, i) => (
                 <Row
                   key={p.name}
@@ -188,6 +191,7 @@ export function Rerank() {
                         }
                         strokeWidth={fell && loss ? 2.25 : 1.6}
                         strokeOpacity={loss ? 0.95 : 0.78}
+                        strokeLinecap="round"
                         vectorEffect="non-scaling-stroke"
                         pathLength={1}
                         style={{
@@ -204,7 +208,7 @@ export function Rerank() {
 
             <p className="eyebrow mt-6 px-3 text-white/45 md:hidden">Ranked by profit</p>
 
-            <div className="border-b border-white/10">
+            <div role="list" aria-label="Ranked by profit" className="border-b border-white/10">
               {byMargin.map((p, i) => (
                 <Row
                   key={p.name}

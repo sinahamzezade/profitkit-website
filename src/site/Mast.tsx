@@ -19,26 +19,32 @@ export function Mast() {
 
         <nav className="flex items-center gap-6">
           <Link
-            href="#method"
+            href="/guide"
+            className="hidden text-sm text-ink-soft transition-colors duration-200 hover:text-ink sm:block"
+          >
+            Guide
+          </Link>
+          <Link
+            href="/#method"
             className="hidden text-sm text-ink-soft transition-colors duration-200 hover:text-ink sm:block"
           >
             Method
           </Link>
           <Link
-            href="#limits"
+            href="/#limits"
             className="hidden text-sm text-ink-soft transition-colors duration-200 hover:text-ink sm:block"
           >
             Limits
           </Link>
           <Link
-            href="#pricing"
+            href="/#pricing"
             className="hidden text-sm text-ink-soft transition-colors duration-200 hover:text-ink sm:block"
           >
             Pricing
           </Link>
-          <a href="#install" className="btn-solid text-sm">
+          <Link href="/#install" className="btn-solid text-sm">
             Install on Shopify
-          </a>
+          </Link>
         </nav>
       </div>
     </header>
