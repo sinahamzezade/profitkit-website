@@ -1,22 +1,21 @@
+/*
+  Square, radius 0, per MASTER.md — the previous mark was a rounded pill with a
+  hardcoded green stroke, both of which the system rejects.
+
+  The glyph is the product's thesis: a flat revenue rule with a margin line
+  falling away beneath it. Loss red appears here as data, not as logo ornament.
+*/
 export function Mark({ className = "size-10" }: { className?: string }) {
   return (
     <span
-      aria-hidden
-      className={`inline-flex shrink-0 items-center justify-center rounded-full bg-ink ${className}`}
+      aria-hidden="true"
+      className={`inline-flex shrink-0 items-center justify-center bg-ink ${className}`}
     >
-      <svg viewBox="0 0 24 24" className="size-[55%]" fill="none">
-        <path
-          d="M6 16.5c3.2-7 8.8-7 12 0"
-          stroke="#00C56A"
-          strokeWidth="2.2"
-          strokeLinecap="round"
-        />
-        <path
-          d="M7.5 8.5h9"
-          stroke="#F7F8F4"
-          strokeWidth="2.2"
-          strokeLinecap="round"
-        />
+      <svg viewBox="0 0 24 24" className="size-[62%]" fill="none">
+        {/* Revenue: flat, unbothered. */}
+        <path d="M4 9h16" stroke="var(--ink-inverse)" strokeWidth="2" />
+        {/* Margin: the same period, falling. */}
+        <path d="M4 13l5 1.6 5-3.2 6 5.6" stroke="var(--loss)" strokeWidth="2" />
       </svg>
     </span>
   );

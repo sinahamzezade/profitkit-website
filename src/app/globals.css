@@ -1,26 +1,52 @@
 @import "tailwindcss";
 
+/*
+  Ledger Signal — tokens per design-system/profitkit/MASTER.md.
+
+  The previous implementation had drifted: warm canvas (#f7f8f4) and a green
+  accent (#00c56a). Both fight the product. Green reads as "money good" on a
+  surface whose entire job is showing money leaving, and the system specifies
+  cool zinc paper with loss red as the single accent.
+*/
 :root {
-  --canvas: #f7f8f4;
-  --ink: #172018;
-  --mute: #5c6a5f;
-  --spring: #00c56a;
-  --forest: #123528;
-  --wash: #e7f4ec;
-  --amber: #e8a317;
+  --paper: #e8ecf1;
+  --paper-deep: #d5dce6;
+  --surface: #f5f7fa;
+  --ink: #0e1116;
+  --ink-soft: #5a6370;
+  --ink-inverse: #f5f7fa;
+  --loss: #d41820;
+  --loss-soft: #f28b8f;
+  --profit: #0a6e6a;
+  --rule: #b7c0cc;
+  --band: #12151c;
+  --band-soft: #1c2230;
+  --steel: #2f5563;
+
+  --gutter: clamp(1.25rem, 5vw, 3.5rem);
 }
 
 @theme inline {
-  --color-canvas: var(--canvas);
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-surface: var(--surface);
   --color-ink: var(--ink);
-  --color-mute: var(--mute);
-  --color-spring: var(--spring);
-  --color-forest: var(--forest);
-  --color-wash: var(--wash);
-  --color-amber: var(--amber);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-inverse: var(--ink-inverse);
+  --color-loss: var(--loss);
+  --color-loss-soft: var(--loss-soft);
+  --color-profit: var(--profit);
+  --color-rule: var(--rule);
+  --color-band: var(--band);
+  --color-band-soft: var(--band-soft);
+  --color-steel: var(--steel);
+
   --font-display: var(--font-display);
   --font-sans: var(--font-body);
   --font-mono: var(--font-mono);
+
+  /* Radius 0 everywhere on marketing — mechanical, not soft SaaS. */
+  --radius-none: 0;
 }
 
 @layer base {
@@ -30,55 +56,139 @@
   }
 
   body {
-    background: var(--canvas);
+    background-color: var(--paper);
     color: var(--ink);
-    font-family: var(--font-body), "Sora", sans-serif;
+    font-family: var(--font-body), ui-sans-serif, sans-serif;
     font-size: 1rem;
     line-height: 1.6;
+  }
+
+  /*
+    Atmosphere lives on its own fixed, non-interactive layer rather than as a
+    `background-attachment: fixed` image on the body. Two large radial gradients
+    pinned to a scrolling element force the compositor to repaint them on every
+    frame — enough to stall painting entirely on weaker renderers. Isolated here
+    it paints once and is never touched again.
+  */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      radial-gradient(
+        62rem 40rem at 12% -8%,
+        color-mix(in srgb, var(--steel) 13%, transparent),
+        transparent 70%
+      ),
+      radial-gradient(
+        48rem 34rem at 92% 6%,
+        color-mix(in srgb, var(--profit) 9%, transparent),
+        transparent 72%
+      );
   }
 
   a {
     color: inherit;
   }
 
+  /* Focus is loss red per the system, and never removed without replacement. */
   :focus-visible {
-    outline: 2px solid var(--spring);
+    outline: 2px solid var(--loss);
     outline-offset: 3px;
   }
 
   ::selection {
-    background: color-mix(in srgb, var(--spring) 30%, transparent);
+    background: color-mix(in srgb, var(--loss) 22%, transparent);
   }
 }
 
 @layer utilities {
   .font-display {
-    font-family: var(--font-display), "Bricolage Grotesque", sans-serif;
-    letter-spacing: -0.03em;
-    line-height: 1.05;
+    font-family: var(--font-display), ui-sans-serif, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 0.95;
     text-wrap: balance;
   }
 
+  /* Every money figure and percentage. tabular-nums so columns align. */
   .num {
-    font-family: var(--font-mono), "Spline Sans Mono", ui-monospace, monospace;
+    font-family: var(--font-mono), ui-monospace, monospace;
     font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
   }
 
-  .lift {
-    box-shadow: 0 18px 50px rgb(23 32 24 / 0.1);
+  .wrap {
+    width: 100%;
+    max-width: 72rem;
+    margin-inline: auto;
+    padding-inline: var(--gutter);
   }
 
-  @keyframes marquee {
+  .eyebrow {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* Buttons: radius 0, hover shifts to loss red, no scale or lift. */
+  .btn-solid {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ink);
+    color: var(--ink-inverse);
+    border: 1px solid var(--ink);
+    padding: 0.68em 1.25em;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+      background 200ms ease,
+      border-color 200ms ease;
+  }
+  .btn-solid:hover {
+    background: var(--loss);
+    border-color: var(--loss);
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--ink);
+    padding: 0.68em 1.25em;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+      background 200ms ease,
+      color 200ms ease;
+  }
+  .btn-ghost:hover {
+    background: var(--ink);
+    color: var(--ink-inverse);
+  }
+
+  /* Motion budget for the whole page: this rise, plus the chart draw. */
+  .rise {
+    animation: rise 620ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+    animation-delay: var(--rise-delay, 0ms);
+  }
+
+  @keyframes rise {
     from {
-      transform: translateX(0);
+      opacity: 0;
+      transform: translateY(0.75rem);
     }
     to {
-      transform: translateX(-50%);
+      opacity: 1;
+      transform: none;
     }
-  }
-
-  .marquee-track {
-    animation: marquee 28s linear infinite;
   }
 }
 
@@ -87,7 +197,16 @@
     scroll-behavior: auto;
   }
 
-  .marquee-track {
+  .rise {
     animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  /* The chart's link paths are drawn with dashoffset; show them immediately. */
+  [data-draw] {
+    stroke-dashoffset: 0 !important;
+    animation: none !important;
+    transition: none !important;
   }
 }
