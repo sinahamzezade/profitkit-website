@@ -196,10 +196,10 @@ export default function PrivacyPage() {
             <Section id="contact" title="Contact">
               <p>
                 <a
-                  href="mailto:support@profitkit.app"
+                  href="mailto:profitkitapp@gmail.com"
                   className="text-steel underline decoration-rule underline-offset-4 transition-colors duration-200 hover:text-ink"
                 >
-                  support@profitkit.app
+                  profitkitapp@gmail.com
                 </a>
               </p>
             </Section>

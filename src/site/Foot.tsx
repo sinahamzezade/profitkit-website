@@ -26,7 +26,7 @@ const COLUMNS = [
   {
     heading: "Contact",
     links: [
-      { label: "support@profitkit.app", href: "mailto:support@profitkit.app" },
+      { label: "profitkitapp@gmail.com", href: "mailto:profitkitapp@gmail.com" },
     ],
   },
 ];
