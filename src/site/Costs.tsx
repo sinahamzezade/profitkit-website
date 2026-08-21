@@ -1,7 +1,3 @@
-import Image from "next/image";
-
-import { SCENES } from "@/site/media";
-
 /*
   What revenue hides. A ledger, not a card grid — four hairline rows, each naming
   the cost, what Shopify actually gives you, and what Profitkit does about it.
@@ -49,19 +45,6 @@ export function Costs() {
         </div>
 
         <div>
-          {/* Wide crop rather than a boxed thumbnail: the goods are the subject of
-              every figure below, and a letterbox reads as a header rule with an
-              image in it rather than as decoration. */}
-          <div className="relative mb-2 aspect-[16/5] w-full overflow-hidden bg-paper-deep">
-            <Image
-              src={SCENES.floor.src}
-              alt={SCENES.floor.alt}
-              fill
-              sizes="(min-width: 1024px) 46rem, 100vw"
-              className="object-cover grayscale contrast-[1.05]"
-            />
-          </div>
-
           <ul className="m-0 list-none p-0">
             {COSTS.map((cost, i) => (
               <li

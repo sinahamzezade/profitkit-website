@@ -3,8 +3,8 @@
   products ranked twice — by revenue, then by what survives cost of goods, payment
   fees, shipping and refunds. The crossing lines are the entire argument.
 
-  Deliberately a server component. Nothing here is interactive: the sort is pure
-  computation, row hover is CSS, and the link draw is a CSS animation. That keeps
+  Deliberately a server component. Pair-hover is CSS :has() on a shared data-p,
+  the sort is pure computation, and the link draw is a CSS animation. That keeps
   the page's heaviest visual at zero client JavaScript.
 
   Link geometry is computed from row indices rather than measured from the DOM, so
@@ -50,14 +50,29 @@ function money(n: number) {
 const byRevenue = [...PRODUCTS].sort((a, b) => b.revenue - a.revenue);
 const byMargin = [...PRODUCTS].sort((a, b) => b.margin - a.margin);
 const marginRank = new Map(byMargin.map((p, i) => [p.name, i]));
+const productId = new Map(PRODUCTS.map((p, i) => [p.name, i]));
+
+/*
+  Control points sit at mid-width, same x, opposite y. That is the bump-chart S:
+  the whole vertical travel is spread across the gutter instead of collapsing into
+  a near-vertical tangle at the centre (the 42/58 pair did that — 16% of a 12rem
+  column is ~22px, and --steel at 0.62 on --band vanished there).
+*/
+function linkPath(from: number, to: number) {
+  const y1 = from * ROW + ROW / 2;
+  const y2 = to * ROW + ROW / 2;
+  return `M 0 ${y1} C 50 ${y1}, 50 ${y2}, 100 ${y2}`;
+}
 
 function Row({
+  pid,
   rank,
   name,
   figure,
   isLoss,
   align = "left",
 }: {
+  pid: number;
   rank: number;
   name: string;
   figure: string;
@@ -67,8 +82,10 @@ function Row({
   const right = align === "right";
   return (
     <div
+      data-p={pid}
+      tabIndex={0}
       style={{ height: ROW }}
-      className={`flex items-center gap-3 border-t border-white/10 px-3 transition-colors duration-200 hover:bg-white/[0.06] ${
+      className={`rerank-row flex cursor-pointer items-center gap-3 border-t border-white/10 px-3 ${
         right ? "flex-row-reverse text-right" : ""
       }`}
     >
@@ -89,6 +106,20 @@ function Row({
   );
 }
 
+const pairHover = PRODUCTS.map(
+  (_, i) => `
+    .rerank:has([data-p="${i}"]:is(:hover, :focus-visible)) [data-p="${i}"] {
+      opacity: 1;
+    }
+    .rerank:has([data-p="${i}"]:is(:hover, :focus-visible)) .rerank-row[data-p="${i}"] {
+      background: rgba(255, 255, 255, 0.07);
+    }
+    .rerank:has([data-p="${i}"]:is(:hover, :focus-visible)) .rerank-link[data-p="${i}"] [data-draw] {
+      stroke-width: 2.5px;
+    }
+  `,
+).join("");
+
 export function Rerank() {
   const height = PRODUCTS.length * ROW;
 
@@ -99,23 +130,25 @@ export function Rerank() {
           The same six products, ranked by revenue and by profit
         </h2>
 
-        <figure className="m-0">
-          {/* Column headings sit outside the data, gallery-style. */}
-          <div className="grid grid-cols-1 gap-2 md:grid-cols-[1fr_8.5rem_1fr] md:gap-0">
-            <span className="eyebrow text-white/45">Ranked by revenue</span>
+        <figure className="rerank m-0">
+          {/* Column headings sit outside the data, gallery-style. px-3 matches the
+              rows so the labels hang over the same inset, not the outer edge. */}
+          <div className="grid grid-cols-1 gap-2 md:grid-cols-[1fr_12rem_1fr] md:gap-0">
+            <span className="eyebrow px-3 text-white/45">Ranked by revenue</span>
             <span aria-hidden="true" />
-            <span className="eyebrow hidden text-white/45 md:block md:text-right">
+            <span className="eyebrow hidden px-3 text-white/45 md:block md:text-right">
               Ranked by profit
             </span>
           </div>
 
           {/* self-start on every cell: without it the grid stretches each column
               to the row box and the bottom rule floats away from the last row. */}
-          <div className="mt-3 grid grid-cols-1 items-start md:grid-cols-[1fr_8.5rem_1fr]">
+          <div className="mt-3 grid grid-cols-1 items-start md:grid-cols-[1fr_12rem_1fr]">
             <div className="border-b border-white/10">
               {byRevenue.map((p, i) => (
                 <Row
                   key={p.name}
+                  pid={productId.get(p.name)!}
                   rank={i + 1}
                   name={p.name}
                   figure={money(p.revenue)}
@@ -125,47 +158,57 @@ export function Rerank() {
             </div>
 
             {/* The crossing links. Hidden on narrow screens, where the two stacked
-                lists carry the same fact without unreadable diagonals. */}
+                lists carry the same fact without unreadable diagonals. Negative
+                inline margin pulls the path ends under each column's px-3 so the
+                curve meets the figure, not the padding. */}
             <div aria-hidden="true" className="hidden md:block">
               <svg
                 viewBox={`0 0 100 ${height}`}
                 preserveAspectRatio="none"
-                style={{ height, marginTop: 1 }}
-                className="w-full overflow-visible"
+                style={{ height }}
+                className="relative -mx-3 w-[calc(100%+1.5rem)] overflow-visible"
               >
                 {byRevenue.map((p, from) => {
                   const to = marginRank.get(p.name) ?? from;
-                  const y1 = from * ROW + ROW / 2;
-                  const y2 = to * ROW + ROW / 2;
+                  const pid = productId.get(p.name)!;
+                  const loss = p.margin < 0;
                   const fell = to > from;
+                  const d = linkPath(from, to);
                   return (
-                    <path
-                      key={p.name}
-                      data-draw
-                      d={`M 0 ${y1} C 42 ${y1}, 58 ${y2}, 100 ${y2}`}
-                      fill="none"
-                      stroke={p.margin < 0 ? "var(--loss)" : "var(--steel)"}
-                      strokeWidth={fell && p.margin < 0 ? 2.5 : 1.5}
-                      strokeOpacity={p.margin < 0 ? 0.95 : 0.62}
-                      vectorEffect="non-scaling-stroke"
-                      pathLength={1}
-                      style={{
-                        strokeDasharray: 1,
-                        strokeDashoffset: 0,
-                        animation: `draw 900ms cubic-bezier(0.2, 0.7, 0.3, 1) ${480 + from * 70}ms both`,
-                      }}
-                    />
+                    <g key={p.name} data-p={pid} className="rerank-link">
+                      <path d={d} fill="none" stroke="transparent" strokeWidth={16} />
+                      <path
+                        d={d}
+                        data-draw
+                        fill="none"
+                        stroke={
+                          loss
+                            ? "var(--loss-soft)"
+                            : "color-mix(in srgb, var(--ink-inverse) 70%, var(--steel))"
+                        }
+                        strokeWidth={fell && loss ? 2.25 : 1.6}
+                        strokeOpacity={loss ? 0.95 : 0.78}
+                        vectorEffect="non-scaling-stroke"
+                        pathLength={1}
+                        style={{
+                          strokeDasharray: 1,
+                          strokeDashoffset: 0,
+                          animation: `draw 900ms cubic-bezier(0.2, 0.7, 0.3, 1) ${480 + from * 70}ms both`,
+                        }}
+                      />
+                    </g>
                   );
                 })}
               </svg>
             </div>
 
-            <p className="eyebrow mt-6 text-white/45 md:hidden">Ranked by profit</p>
+            <p className="eyebrow mt-6 px-3 text-white/45 md:hidden">Ranked by profit</p>
 
             <div className="border-b border-white/10">
               {byMargin.map((p, i) => (
                 <Row
                   key={p.name}
+                  pid={productId.get(p.name)!}
                   rank={i + 1}
                   name={p.name}
                   figure={money(p.margin)}
@@ -192,6 +235,25 @@ export function Rerank() {
         @keyframes draw {
           from { stroke-dashoffset: 1; }
           to { stroke-dashoffset: 0; }
+        }
+        .rerank-row,
+        .rerank-link {
+          transition: opacity 180ms ease, background-color 180ms ease;
+        }
+        .rerank-link [data-draw] {
+          transition: stroke-width 180ms ease;
+        }
+        .rerank:has([data-p]:is(:hover, :focus-visible)) .rerank-row,
+        .rerank:has([data-p]:is(:hover, :focus-visible)) .rerank-link {
+          opacity: 0.22;
+        }
+        ${pairHover}
+        @media (prefers-reduced-motion: reduce) {
+          .rerank-row,
+          .rerank-link,
+          .rerank-link [data-draw] {
+            transition: none;
+          }
         }
       `}</style>
     </section>

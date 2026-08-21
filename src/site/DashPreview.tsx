@@ -1,7 +1,3 @@
-import Image from "next/image";
-
-import { SCENES } from "@/site/media";
-
 /*
   What the app looks like inside Shopify admin.
 
@@ -166,15 +162,11 @@ export function DashPreview() {
               admin.
             </p>
 
-            {/* A real workspace still, cropped tight — context without decoration. */}
-            <div className="relative mt-8 aspect-[4/3] w-full overflow-hidden bg-paper-deep">
-              <Image
-                src={SCENES.desk.src}
-                alt={SCENES.desk.alt}
-                fill
-                sizes="(min-width: 1024px) 19rem, 100vw"
-                className="object-cover grayscale contrast-[1.05]"
-              />
+            {/* Fills the column with a fact rather than a photograph. */}
+            <div className="mt-8 border-t border-ink pt-4">
+              <p className="num text-xs text-ink-soft">
+                Read-only · four scopes · no customer data
+              </p>
             </div>
           </div>
 

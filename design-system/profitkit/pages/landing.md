@@ -15,7 +15,7 @@
 4. Dashboard preview — the app inside Shopify admin
 5. Costs — what revenue hides
 6. Ladder — contribution margin method
-7. Operators — who it is for (anonymous portraits, no quotes)
+7. Operators — who it is for (typographic; no portraits, no quotes)
 8. Limits — honest scope
 9. Pricing
 10. Footer / install
@@ -40,12 +40,13 @@
 
 ## Imagery
 
-Local stills only, from `/public/media` — no remote hosts at runtime. One grade
-across the page: light desaturation, no colour pops competing with loss red.
+**None.** The page carries no photography, portraits or raster assets at all. Its
+visual weight comes from typography, hairline rules, the re-rank chart and the
+dashboard frame — all drawn in markup.
 
-- Portraits are **anonymous operator stills**, square (radius 0), never circular
-- No names, roles-as-people, or quotes attached to a face until real customers exist
-- One full-bleed image moment only (the closing band), with a hard tonal wash
+- CSS atmosphere gradients are not imagery and remain required (see MASTER.md)
+- The wordmark and any icons stay inline SVG, never image files
+- `/public/media` still holds stills from an earlier direction; nothing references them
 
 ## Do not add on landing
 

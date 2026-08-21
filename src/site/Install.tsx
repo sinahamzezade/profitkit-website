@@ -1,32 +1,11 @@
-import Image from "next/image";
-
-import { SCENES } from "@/site/media";
-
 /*
   Closing ask. Dark band bookends the page against the product demo band, so the
-  composition opens and closes on the same instrument — but this one carries a
-  full-bleed still behind it, the page's single image-as-canvas moment.
-
-  The overlay is a hard tonal wash rather than a soft gradient: text contrast has
-  to hold regardless of what the photograph is doing underneath it.
+  composition opens and closes on the same instrument.
 */
 export function Install() {
   return (
-    <section
-      id="install"
-      className="relative isolate overflow-hidden bg-band py-16 md:py-24"
-    >
-      <Image
-        src={SCENES.packing.src}
-        alt=""
-        aria-hidden="true"
-        fill
-        sizes="100vw"
-        className="-z-10 object-cover opacity-30 grayscale"
-      />
-      {/* Tonal wash, palette-locked to band. Keeps body copy above 4.5:1. */}
-      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-band/75" />
-      <div className="wrap relative">
+    <section id="install" className="bg-band py-16 md:py-24">
+      <div className="wrap">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-end lg:gap-16">
           <div>
             <h2 className="font-display max-w-[30ch] text-3xl font-semibold text-ink-inverse md:text-5xl">
