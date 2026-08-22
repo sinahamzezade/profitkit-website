@@ -146,9 +146,8 @@ export function DashPreview() {
       className="border-t border-rule py-16 md:py-24"
     >
       <div className="wrap">
-        {/* Caption block sits left; the product frame takes the wider right column. */}
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[19rem_minmax(0,1fr)] lg:gap-14">
-          <div className="lg:pt-2">
+        <div className="flex flex-col gap-10 md:gap-12">
+          <div className="max-w-[40rem]">
             <p className="eyebrow">Inside Shopify admin</p>
             <h2
               id="dash-title"
@@ -162,7 +161,6 @@ export function DashPreview() {
               admin.
             </p>
 
-            {/* Fills the column with a fact rather than a photograph. */}
             <div className="mt-8 border-t border-ink pt-4">
               <p className="num text-xs text-ink-soft">
                 Read-only · four scopes · no customer data
@@ -179,7 +177,7 @@ export function DashPreview() {
                 <span className="size-2 bg-rule" />
               </span>
               <span className="num text-[0.6875rem] text-ink-soft">
-                admin.shopify.com / apps / profitkit
+                admin.shopify.com / apps / redline
               </span>
             </div>
 

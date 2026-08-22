@@ -1,6 +1,6 @@
-# Profitkit marketing site
+# Redline marketing site
 
-Next.js 16 + Tailwind CSS 4 marketing landing for Profitkit.
+Next.js 16 + Tailwind CSS 4 marketing landing for Redline.
 
 ## Dev
 

@@ -6,7 +6,7 @@
 
 ---
 
-**Project:** Profitkit  
+**Project:** Redline  
 **Generated:** 2026-08-20  
 **Category:** Fintech / Shopify analytics (contribution margin)  
 **Direction:** Ledger Signal — Swiss Industrial Print × data-dense P&L instrument  
@@ -16,7 +16,7 @@
 
 ## Positioning (design implication)
 
-Profitkit is a **P&L engine with a Shopify connector**, not a marketing dashboard.  
+Redline is a **P&L engine with a Shopify connector**, not a marketing dashboard.  
 Visual language must feel like an **audit instrument**: sharp, numeric, loss-aware.  
 Red = money leaving the store. Never spend red on decoration.
 
@@ -85,7 +85,7 @@ Semantic tokens (use these names in Tailwind/CSS — not raw hex in components).
 
 | Token | Size | Use |
 |-------|------|-----|
-| Brand hero | `clamp(3.2rem, 2rem + 8vw, 7.5rem)` | Wordmark “Profitkit” — hero-level brand |
+| Brand hero | `clamp(3.2rem, 2rem + 8vw, 7.5rem)` | Wordmark “Redline” — hero-level brand |
 | Display | `clamp(1.85rem, 1.2rem + 2.4vw, 3.15rem)` | One headline under brand |
 | Body | `clamp(1rem, 0.96rem + 0.2vw, 1.0625rem)` | Supporting sentence |
 | Meta / mono | `0.75rem–0.875rem` | Labels, chart axes, footnotes |
@@ -287,4 +287,4 @@ Libraries OK for app UI later: Recharts / D3. Marketing hero stays custom lightw
 - [ ] `prefers-reduced-motion` respected
 - [ ] Responsive: 375 / 768 / 1024 / 1440
 - [ ] No horizontal scroll on mobile
-- [ ] Hero first viewport passes brand test (remove nav → still reads Profitkit)
+- [ ] Hero first viewport passes brand test (remove nav → still reads Redline)

@@ -1,4 +1,4 @@
-# Profitkit marketing — design
+# Redline marketing — design
 
 Source of truth for the public site (`src/site/`). Match this file before inventing a new look.
 
@@ -12,7 +12,7 @@ Source of truth for the public site (`src/site/`). Match this file before invent
 
 Luxury/refined conversion layout. White surfaces, soft lift, rounded-2xl shells, spring green as the only vivid accent. Forest for the closing band — not purple, not OLED black.
 
-Inspired structurally by high-conversion ecommerce SaaS landings (sticky mast, split hero + mockup, marquee, 2×2, tabs + table, staggered ops, pill cloud, three plans, FAQ, closer). Visual identity is Profitkit: mark, spring, remainder language.
+Inspired structurally by high-conversion ecommerce SaaS landings (sticky mast, split hero + mockup, marquee, 2×2, tabs + table, staggered ops, pill cloud, three plans, FAQ, closer). Visual identity is Redline: mark, spring, remainder language.
 
 ---
 
@@ -45,7 +45,7 @@ Use Tailwind tokens (`bg-canvas`, `text-ink`, …). Hex lives in `src/app/global
 
 - Circle `bg-ink`.
 - Spring arc (remainder) + canvas hairline.
-- Wordmark: **Profitkit** in display, bold, next to the mark.
+- Wordmark: **Redline** in display, bold, next to the mark.
 - Do not recolor the arc. Do not drop the disc.
 
 ---
@@ -143,7 +143,7 @@ Headline on Lead: *Name the SKUs that do not pay.*
 ## Checklist
 
 - [ ] Spring CTAs, forest closer / Pro
-- [ ] Mark + Profitkit wordmark in mast and foot
+- [ ] Mark + Redline wordmark in mast and foot
 - [ ] Display headings, Sora body, mono money
 - [ ] Images from `/media/`
 - [ ] Lucide icons

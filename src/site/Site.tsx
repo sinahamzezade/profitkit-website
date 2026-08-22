@@ -11,7 +11,7 @@ import { Plans } from "@/site/Plans";
 import { Rerank } from "@/site/Rerank";
 
 /*
-  Order follows design-system/profitkit/pages/landing.md, which now records ten
+  Order follows design-system/redline/pages/landing.md, which now records ten
   sections rather than eight. Two were added deliberately and that file was updated
   to match — a locked list that no longer describes the page is worse than none.
 

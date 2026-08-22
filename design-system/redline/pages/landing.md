@@ -22,7 +22,7 @@
 
 ## Hero overrides
 
-- Brand “Profitkit” uses display scale — larger than headline
+- Brand “Redline” uses display scale — larger than headline
 - Headline may italicize only the loss phrase via `text-loss` (not `<em>` serif)
 - Product visual is **edge-to-edge band**, not inset card
 - No stats, schedules, or social-proof chips in first viewport
