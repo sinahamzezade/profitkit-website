@@ -9,11 +9,11 @@ export function Mast() {
         <Link
           href="/"
           className="inline-flex items-center gap-2.5 no-underline"
-          aria-label="Profitkit home"
+          aria-label="Redline home"
         >
           <Mark className="size-7" />
           <span className="font-display text-lg font-semibold tracking-tight text-ink">
-            Profitkit
+            Redline
           </span>
         </Link>
 

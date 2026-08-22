@@ -16,7 +16,7 @@ export function Hero() {
           </p>
 
           {/* Brand sits above the headline in scale — remove the nav and this page
-              still reads as Profitkit. */}
+              still reads as Redline. */}
           <h1
             className="rise font-display mt-5 font-semibold text-ink"
             style={{
@@ -24,7 +24,7 @@ export function Hero() {
               fontSize: "clamp(3.2rem, 2rem + 8vw, 7.5rem)",
             }}
           >
-            Profitkit
+            Redline
           </h1>
 
           <p
@@ -41,7 +41,7 @@ export function Hero() {
             className="rise mt-6 max-w-[62ch] text-ink-soft"
             style={{ ["--rise-delay" as string]: "380ms" }}
           >
-            Shopify ranks products by revenue. Profitkit ranks them by what is left
+            Shopify ranks products by revenue. Redline ranks them by what is left
             after cost of goods, payment fees, shipping and refunds. The order changes,
             and the product at the bottom is usually a surprise.
           </p>

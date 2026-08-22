@@ -26,9 +26,9 @@ const mono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Profitkit — which products lose you money",
+  title: "Redline — which products lose you money",
   description:
-    "Shopify ranks your products by revenue. Profitkit ranks them by what is left after cost of goods, payment fees, shipping and refunds. The order changes.",
+    "Shopify ranks your products by revenue. Redline ranks them by what is left after cost of goods, payment fees, shipping and refunds. The order changes.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

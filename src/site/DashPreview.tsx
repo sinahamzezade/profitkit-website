@@ -157,7 +157,7 @@ export function DashPreview() {
               It lives where you already work.
             </h2>
             <p className="mt-4 max-w-[36ch] text-sm leading-relaxed text-ink-soft">
-              Profitkit is an embedded app, not another tab with another login.
+              Redline is an embedded app, not another tab with another login.
               The ranking, the cost settings and the export all sit inside your
               admin.
             </p>

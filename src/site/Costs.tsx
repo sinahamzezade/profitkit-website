@@ -1,6 +1,6 @@
 /*
   What revenue hides. A ledger, not a card grid — four hairline rows, each naming
-  the cost, what Shopify actually gives you, and what Profitkit does about it.
+  the cost, what Shopify actually gives you, and what Redline does about it.
   The honesty here is the sales pitch: two of these four are things Shopify
   genuinely cannot tell anyone.
 */

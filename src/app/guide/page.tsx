@@ -5,7 +5,7 @@ import { Foot } from "@/site/Foot";
 import { Mast } from "@/site/Mast";
 
 export const metadata: Metadata = {
-  title: "How to use Profitkit",
+  title: "How to use Redline",
   description:
     "Install, give it one cost estimate, read the ranking, then sharpen the costs that matter. The whole walkthrough in seven steps.",
 };
@@ -30,7 +30,7 @@ const STEPS: Step[] = [
   {
     n: "01",
     title: "Install, then wait about a minute",
-    body: "Profitkit reads the last 60 days of orders and your whole product catalogue on install. That is Shopify's limit, not ours — read_orders cannot see further back without a written application. History accumulates forward from the day you install.",
+    body: "Redline reads the last 60 days of orders and your whole product catalogue on install. That is Shopify's limit, not ours — read_orders cannot see further back without a written application. History accumulates forward from the day you install.",
     note: "The dashboard fills in on its own. You do not need to refresh.",
   },
   {
@@ -84,7 +84,7 @@ export default function GuidePage() {
         <div className="max-w-[70ch]">
           <p className="eyebrow">Walkthrough</p>
           <h1 className="font-display mt-4 text-4xl font-semibold text-ink md:text-5xl">
-            How to use Profitkit
+            How to use Redline
           </h1>
           <p className="mt-6 max-w-[58ch] text-base leading-relaxed text-ink">
             Seven steps, in the order you meet them. The whole thing takes an
@@ -145,7 +145,7 @@ export default function GuidePage() {
             href="/"
             className="text-sm text-steel underline decoration-rule underline-offset-4 transition-colors duration-200 hover:text-ink"
           >
-            Back to Profitkit
+            Back to Redline
           </Link>
         </div>
       </main>

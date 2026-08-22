@@ -42,7 +42,7 @@ export function Foot() {
           >
             <Mark className="size-7" />
             <span className="font-display text-base font-semibold text-ink">
-              Profitkit
+              Redline
             </span>
           </Link>
           <p className="mt-3 max-w-[26ch] text-sm leading-relaxed text-ink-soft">
@@ -70,7 +70,7 @@ export function Foot() {
 
       <div className="wrap mt-10 border-t border-rule pt-5">
         <p className="num text-xs text-ink-soft">
-          Profitkit reads your store. It never writes to it.
+          Redline reads your store. It never writes to it.
         </p>
       </div>
     </footer>

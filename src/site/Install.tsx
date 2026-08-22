@@ -31,7 +31,7 @@ export function Install() {
 
           <div className="border-t border-white/15 pt-5 lg:pb-2">
             <p className="max-w-[30ch] text-sm leading-relaxed text-white/50">
-              Read-only. Profitkit never writes to your store, and stores no
+              Read-only. Redline never writes to your store, and stores no
               customer names, emails or addresses.
             </p>
           </div>

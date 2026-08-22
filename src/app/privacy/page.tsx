@@ -5,9 +5,9 @@ import { Foot } from "@/site/Foot";
 import { Mast } from "@/site/Mast";
 
 export const metadata: Metadata = {
-  title: "Privacy policy — Profitkit",
+  title: "Privacy policy — Redline",
   description:
-    "What Profitkit stores, what it deliberately does not store, which permissions it asks for, and how deletion works.",
+    "What Redline stores, what it deliberately does not store, which permissions it asks for, and how deletion works.",
 };
 
 const UPDATED = "21 August 2026";
@@ -62,13 +62,13 @@ export default function PrivacyPage() {
           <p className="num mt-3 text-xs text-ink-soft">Last updated: {UPDATED}</p>
 
           <p className="mt-8 text-base leading-relaxed text-ink">
-            Profitkit analyses the money in your orders, not the people who placed them.
+            Redline analyses the money in your orders, not the people who placed them.
             It reads order economics and product data, and stores no customer identity of
             any kind.
           </p>
 
           <div className="mt-14 space-y-12">
-            <Section id="what-it-stores" title="What Profitkit stores">
+            <Section id="what-it-stores" title="What Redline stores">
               <List
                 items={[
                   "Products and variants: title, vendor, SKU, price, and Shopify's cost field",
@@ -122,13 +122,13 @@ export default function PrivacyPage() {
                 ]}
               />
               <p className="text-ink">
-                Profitkit has no write access. It cannot change anything in your store.
+                Redline has no write access. It cannot change anything in your store.
               </p>
             </Section>
 
             <Section id="protected-data" title="Access to protected customer data">
               <p>
-                Shopify classifies order data as protected customer data. Profitkit
+                Shopify classifies order data as protected customer data. Redline
                 requests access to it in order to read order financials. It does not
                 request access to protected <em>customer fields</em> — name, email,
                 phone, address — because it does not use them.
@@ -147,7 +147,7 @@ export default function PrivacyPage() {
             <Section id="where" title="Where data is held">
               <p>
                 Order and product records are stored in a Postgres database operated
-                solely for running Profitkit, and are transmitted over TLS.
+                solely for running Redline, and are transmitted over TLS.
               </p>
             </Section>
 
@@ -161,14 +161,14 @@ export default function PrivacyPage() {
                   <>
                     <strong className="font-semibold text-ink">On uninstall:</strong>{" "}
                     Shopify sends a shop redaction request 48 hours later. On receiving
-                    it, Profitkit deletes every record belonging to your store — products,
+                    it, Redline deletes every record belonging to your store — products,
                     orders, refunds, your cost settings, and the session — permanently.
                   </>,
                   <>
                     <strong className="font-semibold text-ink">
                       Customer data requests and customer redaction:
                     </strong>{" "}
-                    Profitkit responds to both, reporting that it holds no personal data
+                    Redline responds to both, reporting that it holds no personal data
                     for the customer, because it does not.
                   </>,
                 ]}
@@ -210,7 +210,7 @@ export default function PrivacyPage() {
               href="/"
               className="text-sm text-steel underline decoration-rule underline-offset-4 transition-colors duration-200 hover:text-ink"
             >
-              Back to Profitkit
+              Back to Redline
             </Link>
           </div>
         </div>
