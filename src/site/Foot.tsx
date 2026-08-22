@@ -20,6 +20,7 @@ const COLUMNS = [
     heading: "Legal",
     links: [
       { label: "Privacy policy", href: "/privacy" },
+      { label: "Terms of service", href: "/terms" },
       { label: "Data handling", href: "/privacy#what-it-stores" },
     ],
   },
